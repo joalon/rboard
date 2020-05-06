@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.text }}</p>
+    <div class="media text-muted pt-3">
+        <span class="d-block">
+        Posted by {{ post.user.username }} at {{ post.posted_at.strftime("%Y-%m-%d %H:%M") }}
+        </span>
+    </div>
+    {% if current_user.is_authenticated %}
+        {% if form %}
+            <form method=post>
+                {{ form.csrf_token }}
+                {{ form.body }}
+                <input type=submit value=Comment>
+            </form>
+        {% endif %}
+    {% endif %}
+
+    <br>
+    <br>
+
+    <h6 class="border-bottom border-gray pb-2 mb-0">Recent comments</h6>
+    {% for comment in post.comments recursive %}
+        {% if comment.comments != None %}
+        {{ loop(comment.comments) }}
+        {% endif %}
+        {% if current_user.is_authenticated %}
+            <span class="d-block">
+            {{ comment.text }}
+            </span>
+            <div class="media text-muted pt-3">
+                Posted by {{ comment.user.username }} at {{ comment.posted_at.strftime("%Y-%m-%d %H:%M") }} <a href="{{ url_for('post.post_index', board_name=board_name, post_id=post.id, reply_to=comment.id) }}">reply</a>
+            </div>
+            {% if reply_form and comment_id == comment.id %}
+                <form method=post>
+                    {{ reply_form.csrf_token }}
+                    {{ reply_form.body }}
+                    <input type=submit value=Comment>
+                </form>
+            {% endif %}
+        {% endif %}
+
+        <br>
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+
+    {% if current_user.is_authenticated %}
+    <h1>Welcome {{ current_user.username }}</h1>
+    <div class="media text-muted pt-3">
+        <p class="media-body pb-3 mb-0 small lh-125">
+            <a href="{{ url_for('board.create_board')}}">Create new Board</a>
+            <br>
+            <br>
+        </p>
+    </div>
+    {% endif %}
+
+    <h6 class="border-bottom border-gray pb-2 mb-0">Active boards</h6>
+
+    {% for board in boards %}
+    <div class="media text-muted pt-3">
+        <p class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <a href="{{ url_for('board.board_index', board_name=board.name)}}">{{ board.name }}</a>
+            {% if board.description %}
+            {{ board.description }}
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

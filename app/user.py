@@ -13,30 +13,23 @@ bp = Blueprint('user', __name__)
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
-    print("Got login request")
     if current_user.is_authenticated:
-        print("already logged in")
         redirect(url_for('index'))
 
     form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is not None and user.check_password(form.password.data):
-            print("Found user: " + str(user))
             login_user(user)
-            print(current_user.is_authenticated)
             return redirect(url_for('user.users'))
-        print("user not found")
 
-    print("form invalid:")
-    print(str(form.errors))
     return render_template('login.html', title="Sign in", form=form)
 
 
 @bp.route('/logout')
 def logout():
     logout_user()
-    return redirect(url_for('base.index'))
+    return redirect(url_for('main.index'))
 
 
 @bp.route('/users')
@@ -55,7 +48,7 @@ def register():
                         passwordHash=generate_password_hash(form.password.data))
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('base.index'))
+            return redirect(url_for('main.index'))
     return render_template('register.html', form=form)
 
 
