@@ -65,11 +65,6 @@ def post_index_post(board_name: str, post_id: int):
 @bp.route("/b/<board_name>/<int:post_id>", methods=["GET"])
 def post_index(board_name, post_id):
     post = Post.query.options(joinedload('comments')).get(post_id)
-    print(post)
-    print(post.comments)
-    print("children:")
-    for comment in post.comments:
-        print(comment.comments)
     form = CreateCommentForm(request.form)
 
     if request.args.get("reply_to", default=None) is not None:
@@ -77,12 +72,6 @@ def post_index(board_name, post_id):
         return render_template("post.html", board_name=board_name, post=post,  form=form, reply_form=reply_form, comment_id=request.args.get("reply_to", type=int))
 
     return render_template("post.html", board_name=board_name, post=post, form=form)
-
-
-@bp.route("/b/<board_name>/<int:post_id>/<int:comment_id>")
-def comment(board_name, post_id, comment_id):
-    print("Enter comment")
-    return redirect(url_for("post.post_index", board_name=board_name, post_id=post_id, reply_to=comment_id))
 
 
 class CreatePostForm(FlaskForm):
