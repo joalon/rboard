@@ -70,9 +70,8 @@ class Comment(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     parent_comment_id = db.Column(db.Integer, db.ForeignKey("comment.id"))
 
-    comments = db.relationship(
-        "Comment", backref="parent_comment", remote_side=[id]
-    )
+    parent = db.relationship("Comment", backref="comments", remote_side=[id])
+
 
     def __repr__(self):
         return f"<Comment '{self.id}'>"

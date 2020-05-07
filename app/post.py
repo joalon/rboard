@@ -33,7 +33,7 @@ def post_index_post(board_name: str, post_id: int):
 
         if reply_form.validate_on_submit():
             parent_comment_id = request.args.get("reply_to", type=int)
-            comment = Comment(text=form.body.data)
+            comment = Comment(text=reply_form.body.data)
 
             author = User.query.get(current_user.get_id())
             parent = Comment.query.get(parent_comment_id)
