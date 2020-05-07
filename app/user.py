@@ -32,13 +32,6 @@ def logout():
     return redirect(url_for('main.index'))
 
 
-@bp.route('/users')
-@login_required
-def users():
-    users = User.query.all()
-    return render_template('users.html', title='Users', users=users)
-
-
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
