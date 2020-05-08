@@ -1,11 +1,11 @@
 # RBoard
-A reddit clone build with Python, Flask and SQLite
+A reddit clone built with Python, Flask and SQLite.
 
 
 ## Setup
 ```
 flask db init
-flask db migrate
+flask db migrate -m "Initial migration"
 flask db upgrade
 
 flask run
