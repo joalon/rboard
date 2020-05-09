@@ -1,3 +1,4 @@
+import os
 from flask import Flask, Blueprint, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -14,9 +15,16 @@ csrf = CSRFProtect()
 
 def make_app():
     app = Flask(__name__)
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://rboard:asd123@localhost:5432/rboard'
-    app.config['SECRET_KEY'] = 'Bad_idea 123'
+
+    if app.config['ENV'] == 'dev':
+        print("Starting in dev")
+        app.config.from_pyfile('config/dev.cfg')
+    elif app.config['ENV'] == 'prod':
+        print("Starting in prod")
+        app.config.from_pyfile('config/prod.cfg')
+    else:
+        print("Expected FLASK_ENV to be either 'prod' or 'dev'")
+        exit(1)
 
     db.init_app(app)
     migrate.init_app(app, db)
