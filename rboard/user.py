@@ -1,5 +1,5 @@
-from app import db
-from app.models import User
+from rboard import db
+from rboard.models import User
 from flask import Blueprint
 from flask import request, redirect, url_for, render_template, flash
 from flask_wtf import FlaskForm

@@ -33,23 +33,26 @@ def make_app():
 
     app.register_blueprint(bp)
 
-    from app.main import bp as main_bp
+    from rboard.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    from app.user import bp as user_bp
+    from rboard.user import bp as user_bp
     app.register_blueprint(user_bp)
 
-    from app.board import bp as board_bp
+    from rboard.board import bp as board_bp
     app.register_blueprint(board_bp)
 
-    from app.post import bp as post_bp
+    from rboard.post import bp as post_bp
     app.register_blueprint(post_bp)
 
     return app
+
+
+app = make_app()
 
 
 @login.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
 
-from app.models import User
+from rboard.models import User
