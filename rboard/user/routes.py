@@ -1,6 +1,6 @@
 from rboard import db
+from rboard.user import blueprint
 from rboard.models import User
-from flask import Blueprint
 from flask import request, redirect, url_for, render_template, flash
 from flask_wtf import FlaskForm
 from flask_login import logout_user, current_user, login_user, UserMixin, login_required
@@ -8,10 +8,7 @@ from wtforms import StringField, PasswordField, validators
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-bp = Blueprint('user', __name__)
-
-
-@bp.route('/login', methods=['GET', 'POST'])
+@blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         redirect(url_for('index'))
@@ -26,13 +23,13 @@ def login():
     return render_template('login.html', title="Sign in", form=form)
 
 
-@bp.route('/logout')
+@blueprint.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
 
-@bp.route('/register', methods=['GET', 'POST'])
+@blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST':

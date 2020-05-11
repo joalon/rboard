@@ -6,7 +6,6 @@ from flask_migrate import Migrate
 from flask_wtf import CSRFProtect
 
 
-bp = Blueprint("base", __name__)
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
@@ -31,18 +30,19 @@ def make_app():
     login.init_app(app)
     csrf.init_app(app)
 
-    app.register_blueprint(bp)
+    base_bp = Blueprint("base", __name__)
+    app.register_blueprint(base_bp)
 
-    from rboard.main import bp as main_bp
+    from rboard.main import blueprint as main_bp
     app.register_blueprint(main_bp)
 
-    from rboard.user import bp as user_bp
+    from rboard.user import blueprint as user_bp
     app.register_blueprint(user_bp)
 
-    from rboard.board import bp as board_bp
+    from rboard.board import blueprint as board_bp
     app.register_blueprint(board_bp)
 
-    from rboard.post import bp as post_bp
+    from rboard.post import blueprint as post_bp
     app.register_blueprint(post_bp)
 
     return app

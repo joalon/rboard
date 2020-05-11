@@ -1,16 +1,13 @@
 from rboard import db
+from rboard.board import blueprint
 from rboard.models import Board, Post, User
-from flask import Blueprint
-from flask import request, redirect, url_for, render_template, flash
+from flask import request, redirect, url_for, render_template
 from flask_login import current_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField, validators
 
 
-bp = Blueprint("board", __name__)
-
-
-@bp.route("/create_board", methods=["GET", "POST"])
+@blueprint.route("/create_board", methods=["GET", "POST"])
 @login_required
 def create_board():
     form = CreateBoardForm(request.form)
@@ -32,7 +29,7 @@ def create_board():
     return render_template("create_board.html", form=form)
 
 
-@bp.route("/b/<board_name>", methods=["GET", "POST"])
+@blueprint.route("/b/<board_name>", methods=["GET", "POST"])
 def board_index(board_name):
     board = Board.query.filter_by(name=board_name).first()
     form = CreatePostForm(request.form)

@@ -1,6 +1,6 @@
 from rboard import db
+from rboard.post import blueprint
 from rboard.models import Board, Post, Comment, User
-from flask import Blueprint
 from flask import request, redirect, url_for, render_template, flash
 from sqlalchemy.orm import joinedload
 from flask_login import current_user, login_required
@@ -8,10 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, validators
 
 
-bp = Blueprint("post", __name__)
-
-
-@bp.route("/delete_post/<post_id>", methods=['GET'])
+@blueprint.route("/delete_post/<post_id>", methods=['GET'])
 @login_required
 def delete_post(post_id: int):
     post = Post.query.get(post_id)
@@ -24,7 +21,7 @@ def delete_post(post_id: int):
         return redirect(url_for("board.board_index", board_name=board_name))
 
 
-@bp.route("/b/<board_name>/<int:post_id>", methods=["POST"])
+@blueprint.route("/b/<board_name>/<int:post_id>", methods=["POST"])
 def post_index_post(board_name: str, post_id: int):
     if current_user.is_authenticated:
 
@@ -62,7 +59,7 @@ def post_index_post(board_name: str, post_id: int):
         return "Uh oh!"
 
 
-@bp.route("/b/<board_name>/<int:post_id>", methods=["GET"])
+@blueprint.route("/b/<board_name>/<int:post_id>", methods=["GET"])
 def post_index(board_name, post_id):
     post = Post.query.options(joinedload('comments')).get(post_id)
     form = CreateCommentForm(request.form)
