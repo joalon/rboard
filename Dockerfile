@@ -6,12 +6,15 @@ RUN useradd -d /opt/rboard --shell /bin/bash rboard
 USER rboard
 WORKDIR /opt/rboard
 
-COPY rboard ./rboard
-COPY requirements.txt .
+COPY --chown=rboard rboard ./rboard
+COPY --chown=rboard requirements.txt app.py entrypoint.sh /opt/rboard/
 
 RUN pip3 install --user -r requirements.txt
 
 ENV FLASK_APP rboard
 ENV FLASK_ENV dev
+ENV PATH "/opt/rboard/.local/bin:${PATH}"
 
-CMD flask run
+EXPOSE 5000
+
+ENTRYPOINT ["./entrypoint.sh"]

@@ -48,9 +48,6 @@ def make_app():
     return app
 
 
-app = make_app()
-
-
 @login.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
